@@ -7,7 +7,7 @@ import axios from "axios";
 import "./BookMarker.scss";
 import useResult from "../../hooks/useResult";
 
-function BookMarker({ duration, bookmarker }) {
+function BookMarker({ duration, bookmarker, url }) {
   const {
     pointer,
     callSeekTo,
@@ -23,22 +23,6 @@ function BookMarker({ duration, bookmarker }) {
   const [editingText, setEditingText] = useState("");
   const [isStart, setIsStart] = useState(false);
   const { markers, setMarkers, setRelay } = useResult();
-  // // localstorage;
-  // useEffect(() => {
-  //   const temp = localStorage.getItem("markers");
-  //   console.log(temp)
-  //   console.log(temp.length === 0)
-  //   console.log(temp.length !== 0)
-  //   if (temp === 0) {
-  //     const loadedMarkers = JSON.parse(temp);
-
-  //     if (loadedMarkers) {
-  //       setMarkers(loadedMarkers);
-  //     }
-  //   }
-
-
-  // }, []);
 
   useEffect(() => {
     const temp = JSON.stringify(markers);
@@ -53,7 +37,7 @@ function BookMarker({ duration, bookmarker }) {
   useEffect(() => {
     if (!replayRef) return;
     replayRef.current.saveMarker = handleClick;
-  }, [markers]);
+  }, [url, markers]);
 
   function handleClick(e) {
     if (e) {

@@ -72,18 +72,6 @@ export default function Home() {
     urlInput.current.focus();
   }
 
-  function testIPC() {
-    ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
-      try{
-        console.log(JSON.parse(args));
-      }catch(e){
-      }
-  	});
-    ipcRenderer.send('process call 1', {
-  		number: inputValue.value,
-  	});
-  };
-
   return (
     <div>
       <Header logged={logged} onLogout={onLogout} />
@@ -100,7 +88,6 @@ export default function Home() {
         <h3>URL : {url}</h3>
         <button onClick={linkCheck}>보내기 버튼</button>
         <button onClick={getMethodHello}>get method 버튼</button>
-        <button onClick={testIPC}>test 버튼</button>
         <button onClick={removeUrl}>주소 삭제</button>
       </div>
     </div>

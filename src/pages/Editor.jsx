@@ -169,6 +169,7 @@ function Editor() {
             <BookMarker
               duration={propDuration}
               bookmarker={propBookmarker}
+              url = {url ? url : propUrl}
             />
           </div>
         </div>

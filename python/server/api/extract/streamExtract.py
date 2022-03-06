@@ -77,7 +77,6 @@ def streamProcess(url):
     chat = chat.get()[0]
     pool.close()
     pool.join()
-    ###
 
     folder = os.getcwd()
     target = ''
@@ -86,8 +85,6 @@ def streamProcess(url):
             target = filename
 
     os.remove(folder + '/' + target)
-    # print('delete stream target!!')
-    # print(len(video), len(audio), len(chat[0]))
 
     return {
             'audio' : audio,

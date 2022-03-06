@@ -53,7 +53,7 @@ def _calculate_superchat(currency, amount) :
     return int(exch[currency] * amount)
 
 RANGE_SUPERCHAT = 300
-RANGE_DISTRIBUTION = 10
+RANGE_DISTRIBUTION = 30
 def chatProcess(url_id, duration) :
 
     Distribution = [0 for i in range(duration //RANGE_DISTRIBUTION +1)]

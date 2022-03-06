@@ -5,6 +5,7 @@ import useResult from "../../hooks/useResult";
 
 import { format } from "./in_VideoPlayer/Duration";
 import "./ChatViewer.scss";
+
 function ChatViewer({ url, duration }) {
   const {
     replayRef,
@@ -124,21 +125,22 @@ function ChatViewer({ url, duration }) {
             return;
           case "ShiftLeft":
             replayRef.current.subKey.isShiftKey = true;
-            // console.log('shift keydown')
+            console.log('shift keydown')
             return;
           case "ControlLeft":
             replayRef.current.subKey.isCtrlKey = true;
-            // console.log('ctrl keydown')
+            console.log('ctrl keydown')
             return;
           case "KeyS":
+            console.log(event)
             if (
               replayRef.current.subKey.isShiftKey &&
               replayRef.current.subKey.isCtrlKey
             ) {
-              replayRef.current.saveMarker();
+              console.log('S keydown')
+              replayRef.current.saveMarker()
             }
             replayRef.current.wordKey.isS = true;
-            // console.log('K keydown')
             return;
           default:
             return;
@@ -149,7 +151,7 @@ function ChatViewer({ url, duration }) {
     return () => {
       window.removeEventListener("keydown", handleKeyboardDown);
     };
-  }, [pointer, isplaying, isChatKeywords]);
+  }, [url, pointer, isplaying, isChatKeywords]);
 
   // window Keyup event
   useEffect(() => {
@@ -188,7 +190,7 @@ function ChatViewer({ url, duration }) {
     return () => {
       window.removeEventListener("keyup", handleKeyboardUp);
     };
-  }, [pointer, isplaying, isChatKeywords]);
+  }, [url, pointer, isplaying, isChatKeywords]);
 
   // 키워드 검색커서 벗어나기 위해 배경 클릭하면, 키보드 재생/중지 가능하도록 이벤트
   useEffect(() => {
