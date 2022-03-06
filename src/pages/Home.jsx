@@ -5,6 +5,7 @@ import useRoute from "../hooks/useRoute";
 import Header from "../components/Header/Header";
 import "./Home.scss";
 
+
 export default function Home() {
   const inputValue = document.getElementById("link");
   const urlInput = useRef();
@@ -67,6 +68,8 @@ export default function Home() {
     inputValue.value = "";
     urlInput.current.focus();
   }
+
+
 
   return (
     <div>
