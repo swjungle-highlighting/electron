@@ -72,13 +72,15 @@ export default function Home() {
     urlInput.current.focus();
   }
 
-  function testIPC() { 
-    console.log('process run 1');
+  function testIPC() {
     ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
-  		console.log(args);
+      try{
+        console.log(JSON.parse(args));
+      }catch(e){
+      }
   	});
     ipcRenderer.send('process call 1', {
-  		number: 24,
+  		number: inputValue.value,
   	});
   };
 

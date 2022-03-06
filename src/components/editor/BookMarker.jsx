@@ -23,15 +23,22 @@ function BookMarker({ duration, bookmarker }) {
   const [editingText, setEditingText] = useState("");
   const [isStart, setIsStart] = useState(false);
   const { markers, setMarkers, setRelay } = useResult();
-  // localstorage;
-  useEffect(() => {
-    const temp = localStorage.getItem("markers");
-    const loadedMarkers = JSON.parse(temp);
+  // // localstorage;
+  // useEffect(() => {
+  //   const temp = localStorage.getItem("markers");
+  //   console.log(temp)
+  //   console.log(temp.length === 0)
+  //   console.log(temp.length !== 0)
+  //   if (temp === 0) {
+  //     const loadedMarkers = JSON.parse(temp);
 
-    if (loadedMarkers) {
-      setMarkers(loadedMarkers);
-    }
-  }, []);
+  //     if (loadedMarkers) {
+  //       setMarkers(loadedMarkers);
+  //     }
+  //   }
+
+
+  // }, []);
 
   useEffect(() => {
     const temp = JSON.stringify(markers);
@@ -91,7 +98,7 @@ function BookMarker({ duration, bookmarker }) {
     // setMarker(""); //얜왜하지?
   }
 
-  
+
   function deleteMarker(id) {
     const updateMarkers = [...markers].filter((marker) => marker.id !== id);
 
@@ -268,8 +275,8 @@ function BookMarker({ duration, bookmarker }) {
           {isStart
             ? "북마크종료"
             : replayRef?.current.isReplay
-            ? "북마크저장"
-            : "북마크시작"}
+              ? "북마크저장"
+              : "북마크시작"}
         </button>
 
         {markers.map((marker) => (

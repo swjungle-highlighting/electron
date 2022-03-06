@@ -1,3 +1,7 @@
+import sys, os
+
+sys.stderr = sys.stdout
+
 import os
 from PIL import Image
 import ffmpeg

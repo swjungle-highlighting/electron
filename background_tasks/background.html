@@ -5,7 +5,7 @@
 
 	ipcRenderer.on('process run 1', (event, args) => {
 		const { data } = args;
-		let pyshell = new PythonShell(path.join(__dirname, '/../scripts/sprite.py'), {
+		let pyshell = new PythonShell(path.join(__dirname, '/../scripts/test.py'), {
 			pythonPath: path.join(__dirname, '/../python/python.exe'),
 			args: [data]
 		});

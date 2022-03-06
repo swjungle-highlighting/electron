@@ -57,44 +57,48 @@ const AppStateProvider = ({ children }) => {
   }
 
   function requestResult(url) {
-    axios
-      .post(server_addr + "/flask/hello", {
-        url: url,
-      })
-      .then((response) => {
-        localStorage.setItem("localDuration", response.data.result.duration);
-        setDuration(response.data.result.duration);
+    ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
+      try{
+        let data = JSON.parse(args)
+        console.log(data)
+        localStorage.setItem("localDuration", data.duration);
+        setDuration(data.duration);
         localStorage.setItem("prevUrl", url);
         localStorage.setItem(
           "markers",
-          JSON.stringify(response.data.bookmarker)
+          JSON.stringify(data.bookmarker)
         );
-        setBookmarker(response.data.bookmarker);
-        localStorage.setItem("localAudio", response.data.result.audio);
-        setAudio(response.data.result.audio);
+        setBookmarker(data.bookmarker);
+        localStorage.setItem("localAudio", data.audio);
+        setAudio(data.audio);
         localStorage.setItem(
           "localChatDistribution",
-          response.data.result.chat[0]
+          data.chat[0]
         );
-        setChatDistribution(response.data.result.chat[0]);
+        setChatDistribution(data.chat[0]);
         localStorage.setItem(
           "localChatSet",
-          JSON.stringify(response.data.result.chat[1])
+          JSON.stringify(data.chat[1])
         );
-        setChatSet(response.data.result.chat[1]);
-        localStorage.setItem("localChatSuper", response.data.result.chat[2]);
-        setChatSuper(response.data.result.chat[2]);
-        localStorage.setItem("localVideo", response.data.result.video);
-        setVideo(response.data.result.video);
-        const title = response.data.result.title;
+        setChatSet(data.chat[1]);
+        localStorage.setItem("localChatSuper", data.chat[2]);
+        setChatSuper(data.chat[2]);
+        localStorage.setItem("localVideo", data.video);
+        setVideo(data.video);
+        const title = data.title;
         setTitle(title);
-        const thumbnail = response.data.result.thumbnail;
+        const thumbnail = data.thumbnail;
         setThumNail(thumbnail);
         goEditor();
-      })
-      .catch((error) => {
+
+      }catch(e){
+        console.log(e)
         goNotFound();
-      });
+      }
+  	});
+    ipcRenderer.send('process call 1', {
+  		number: url,
+  	});
     goLoading();
   }
 
