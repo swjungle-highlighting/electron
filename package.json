@@ -83,12 +83,13 @@
       ]
     },
     "files": [
-      "background/**/*",
+      "background_tasks/**/*",
       "build/**/*",
       "python/**/*",
       "public/Logo.png",
       "node_modules/**/*",
-      "scripts/startup_aggregate.py"
+      "scripts/*",
+      "chat_storage/dummy"
     ],
     "extends": null
   }
