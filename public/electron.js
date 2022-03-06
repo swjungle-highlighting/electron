@@ -18,6 +18,8 @@ function createWindow() {
 				slashes: true,
 		  });
 	mainWindow = new BrowserWindow({
+    width: 1920,
+    height: 1280,
 		webPreferences: {
 			nodeIntegration: true,
 		},
@@ -59,7 +61,7 @@ let hiddenWindow;
 
 // This event listener will listen for request
 // from visible renderer process
-ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
+ipcMain.on('start background', (event, args) => {
 	const backgroundFileUrl = url.format({
 		pathname: path.join(__dirname, `../background_tasks/background.html`),
 		protocol: 'file:',
@@ -78,8 +80,6 @@ ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
 	hiddenWindow.on('closed', () => {
 		hiddenWindow = null;
 	});
-
-	cache.data = args.number;
 });
 
 // This event listener will listen for data being sent back
@@ -88,9 +88,14 @@ ipcMain.on('MESSAGE_FROM_BACKGROUND', (event, args) => {
 	mainWindow.webContents.send('MESSAGE_FROM_BACKGROUND_VIA_MAIN', args.message);
 });
 
-ipcMain.on('BACKGROUND_READY', (event, args) => {
+ipcMain.on('background open', (event, args) => {
 
-	event.reply('START_PROCESSING', {
+	mainWindow.webContents.send('background open alert', 'background open');
+});
+
+ipcMain.on('process call 1', (event, args) => {
+  cache.data = args.number;
+	hiddenWindow.webContents.send('process run 1', {
 		data: cache.data,
 	});
 });

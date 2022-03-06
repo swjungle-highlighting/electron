@@ -5,6 +5,9 @@ import useRoute from "../hooks/useRoute";
 import Header from "../components/Header/Header";
 import "./Home.scss";
 
+const electron = window.require('electron');
+const { ipcRenderer } = electron;
+
 
 export default function Home() {
   const inputValue = document.getElementById("link");
@@ -69,7 +72,15 @@ export default function Home() {
     urlInput.current.focus();
   }
 
-
+  function testIPC() { 
+    console.log('process run 1');
+    ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
+  		console.log(args);
+  	});
+    ipcRenderer.send('process call 1', {
+  		number: 24,
+  	});
+  };
 
   return (
     <div>
@@ -87,6 +98,7 @@ export default function Home() {
         <h3>URL : {url}</h3>
         <button onClick={linkCheck}>보내기 버튼</button>
         <button onClick={getMethodHello}>get method 버튼</button>
+        <button onClick={testIPC}>test 버튼</button>
         <button onClick={removeUrl}>주소 삭제</button>
       </div>
     </div>

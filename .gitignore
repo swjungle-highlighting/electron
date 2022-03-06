@@ -12,7 +12,3 @@
 .env.production.local
 
 npm-debug.log*
-
-# python environment and binary
-/scripts/Pipfile
-/scripts/Pipfile.lock

@@ -15,11 +15,10 @@ const { ipcRenderer } = electron;
 
 class App extends Component {
   componentDidMount() {
-		ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
+		ipcRenderer.on('background open alert', (event, args) => {
 			console.log(args);
 		});
-		ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
-			number: 25,
+		ipcRenderer.send('start background', {
 		});
 	}
 

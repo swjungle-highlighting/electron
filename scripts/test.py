@@ -1,5 +1,5 @@
 import sys
 
-data = sys.argv[1]
+data = sys.argv[1:]
 
-print(int(data)*10)
+print(data)
