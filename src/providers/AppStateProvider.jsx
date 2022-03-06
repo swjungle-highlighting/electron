@@ -3,6 +3,10 @@ import AppStateContext from "../contexts/AppStateContext";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
+const electron = window.require('electron');
+const { ipcRenderer } = electron;
+
+
 const AppStateProvider = ({ children }) => {
   const [url, setUrl] = useState();
   const [audio, setAudio] = useState();
@@ -53,32 +57,21 @@ const AppStateProvider = ({ children }) => {
   }
 
   function requestResult(url) {
-    console.log("request start");
-    console.time("requestTime");
-
     axios
       .post(server_addr + "/flask/hello", {
         url: url,
       })
       .then((response) => {
-        console.log("Success", response.data);
         localStorage.setItem("localDuration", response.data.result.duration);
         setDuration(response.data.result.duration);
-        console.log(`duration`, response.data.result.duration);
-
         localStorage.setItem("prevUrl", url);
-
         localStorage.setItem(
           "markers",
           JSON.stringify(response.data.bookmarker)
         );
-
         setBookmarker(response.data.bookmarker);
-        console.log(response.data.bookmarker);
-
         localStorage.setItem("localAudio", response.data.result.audio);
         setAudio(response.data.result.audio);
-
         localStorage.setItem(
           "localChatDistribution",
           response.data.result.chat[0]
@@ -91,31 +84,84 @@ const AppStateProvider = ({ children }) => {
         setChatSet(response.data.result.chat[1]);
         localStorage.setItem("localChatSuper", response.data.result.chat[2]);
         setChatSuper(response.data.result.chat[2]);
-
         localStorage.setItem("localVideo", response.data.result.video);
         setVideo(response.data.result.video);
-
-        console.timeEnd("requestTime");
-        console.log("gobefore");
-
         const title = response.data.result.title;
         setTitle(title);
-        console.log("set Title :", title);
-
         const thumbnail = response.data.result.thumbnail;
         setThumNail(thumbnail);
-        console.log("set thumbnail : ", thumbnail);
-
-        console.log("Go Editor");
         goEditor();
       })
       .catch((error) => {
-        console.log("에러 감지");
-        console.log(error);
         goNotFound();
       });
     goLoading();
   }
+
+  // function requestResult(url) {
+  //   console.log("request start");
+  //   console.time("requestTime");
+
+  //   axios
+  //     .post(server_addr + "/flask/hello", {
+  //       url: url,
+  //     })
+  //     .then((response) => {
+  //       console.log("Success", response.data);
+  //       localStorage.setItem("localDuration", response.data.result.duration);
+  //       setDuration(response.data.result.duration);
+  //       console.log(`duration`, response.data.result.duration);
+
+  //       localStorage.setItem("prevUrl", url);
+
+  //       localStorage.setItem(
+  //         "markers",
+  //         JSON.stringify(response.data.bookmarker)
+  //       );
+
+  //       setBookmarker(response.data.bookmarker);
+  //       console.log(response.data.bookmarker);
+
+  //       localStorage.setItem("localAudio", response.data.result.audio);
+  //       setAudio(response.data.result.audio);
+
+  //       localStorage.setItem(
+  //         "localChatDistribution",
+  //         response.data.result.chat[0]
+  //       );
+  //       setChatDistribution(response.data.result.chat[0]);
+  //       localStorage.setItem(
+  //         "localChatSet",
+  //         JSON.stringify(response.data.result.chat[1])
+  //       );
+  //       setChatSet(response.data.result.chat[1]);
+  //       localStorage.setItem("localChatSuper", response.data.result.chat[2]);
+  //       setChatSuper(response.data.result.chat[2]);
+
+  //       localStorage.setItem("localVideo", response.data.result.video);
+  //       setVideo(response.data.result.video);
+
+  //       console.timeEnd("requestTime");
+  //       console.log("gobefore");
+
+  //       const title = response.data.result.title;
+  //       setTitle(title);
+  //       console.log("set Title :", title);
+
+  //       const thumbnail = response.data.result.thumbnail;
+  //       setThumNail(thumbnail);
+  //       console.log("set thumbnail : ", thumbnail);
+
+  //       console.log("Go Editor");
+  //       goEditor();
+  //     })
+  //     .catch((error) => {
+  //       console.log("에러 감지");
+  //       console.log(error);
+  //       goNotFound();
+  //     });
+  //   goLoading();
+  // }
 
   function getMethodKeywords(e) {
     console.log("call getMethod()");

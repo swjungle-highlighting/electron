@@ -1,73 +1,50 @@
-const electron = require("electron");
-const path = require("path");
-const url = require("url");
-const log = require("electron-log");
+const electron = require('electron');
+const path = require('path');
+const url = require('url');
 
 const { app } = electron;
 const { BrowserWindow } = electron;
 
-const { ipcMain, protocol } = require("electron");
+const { ipcMain } = require('electron');
 
 let mainWindow;
 
 function createWindow() {
-  //hides electron security warnings from developer console 
-  process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
-  const startUrl = process.env.DEV
-    ? "http://localhost:3000"
-    : url.format({
-        pathname: path.join(__dirname, "/../build/index.html"),
-        protocol: "file:",
-        slashes: true,
-      });
-  mainWindow = new BrowserWindow({
-    title: "Highlighting",
+	const startUrl = process.env.DEV
+		? 'http://localhost:3000'
+		: url.format({
+				pathname: path.join(__dirname, '/../build/index.html'),
+				protocol: 'file:',
+				slashes: true,
+		  });
+	mainWindow = new BrowserWindow({
     width: 1920,
     height: 1280,
-    icon: path.join(__dirname, 'Logo.png'),
-    webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule: true,
-    },
-  });
+		webPreferences: {
+			nodeIntegration: true,
+		},
+	});
 
-  mainWindow.loadURL(startUrl);
-  process.env.DEV && mainWindow.webContents.openDevTools();
+	mainWindow.loadURL(startUrl);
+	process.env.DEV && mainWindow.webContents.openDevTools();
 
-  mainWindow.on("closed", function () {
-    mainWindow = null;
-  });
+	mainWindow.on('closed', function() {
+		mainWindow = null;
+	});
 }
 
-app.on("ready", function () {
-  // register local file protocol
-  // https://www.electronjs.org/docs/api/protocol#protocolregisterfileprotocolscheme-handler
-  protocol.registerFileProtocol("local-video", (req, callback) => {
-    const url = req.url.replace("local-video://", "");
-    const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
+app.on('ready', createWindow);
 
-    try {
-      return callback(decodedUrl);
-    } catch (err) {
-      log.error('Invalid video file selected:', err);
-      return callback(404);
-    }
-  });
-
-  // electron start
-  createWindow();
+app.on('window-all-closed', () => {
+	if (process.platform !== 'darwin') {
+		app.quit();
+	}
 });
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
-});
-
-app.on("activate", () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
+app.on('activate', () => {
+	if (mainWindow === null) {
+		createWindow();
+	}
 });
 
 // ------------------- set up event listeners here --------------------
@@ -75,63 +52,50 @@ app.on("activate", () => {
 // temporary variable to store data while background
 // process is ready to start processing
 let cache = {
-  data: undefined,
-  pythonPath: undefined,
+	data: undefined,
 };
 
 // a window object outside the function scope prevents
-// the object from being garbage collected ???
+// the object from being garbage collected
 let hiddenWindow;
 
 // This event listener will listen for request
 // from visible renderer process
-// args.data comes in as an array of strings
-ipcMain.on("START_BACKGROUND_VIA_MAIN", (event, args) => {
-  const backgroundFileUrl = url.format({
-    pathname: path.join(__dirname, `../background/startup_aggregate.html`),
-    protocol: "file:",
-    slashes: true,
-  });
-  hiddenWindow = new BrowserWindow({
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-    },
-  });
-  hiddenWindow.loadURL(backgroundFileUrl);
+ipcMain.on('start background', (event, args) => {
+	const backgroundFileUrl = url.format({
+		pathname: path.join(__dirname, `../background_tasks/background.html`),
+		protocol: 'file:',
+		slashes: true,
+	});
+	hiddenWindow = new BrowserWindow({
+		show: false,
+		webPreferences: {
+			nodeIntegration: true,
+		},
+	});
+	hiddenWindow.loadURL(backgroundFileUrl);
 
-  hiddenWindow.webContents.openDevTools();
+	hiddenWindow.webContents.openDevTools();
 
-  hiddenWindow.on("closed", () => {
-    hiddenWindow = null;
-  });
-
-  // store this data; we'll get it later
-  cache.data = args.data;
-  cache.pythonPath = args.pythonPath;
+	hiddenWindow.on('closed', () => {
+		hiddenWindow = null;
+	});
 });
 
 // This event listener will listen for data being sent back
 // from the background renderer process
-// On success, the data will be { message: data }
-// On error, the data will be { error: error message }
-ipcMain.on("MESSAGE_FROM_BACKGROUND", (event, args) => {
-  mainWindow.webContents.send("MESSAGE_FROM_BACKGROUND_VIA_MAIN", args);
+ipcMain.on('MESSAGE_FROM_BACKGROUND', (event, args) => {
+	mainWindow.webContents.send('MESSAGE_FROM_BACKGROUND_VIA_MAIN', args.message);
 });
 
-// track Python process IDs
-let currentPid;
-ipcMain.on("PID_FROM_BACKGROUND", (event, args) => {
-  currentPid = args.message;
-  log.info('Started background process with PID', currentPid);
-  mainWindow.webContents.send("PID_FROM_BACKGROUND_VIA_MAIN", args.message);
+ipcMain.on('background open', (event, args) => {
+
+	mainWindow.webContents.send('background open alert', 'background open');
 });
 
-// listening for the confirmation that the hidden renderer is ready
-ipcMain.on("BACKGROUND_READY", (event, args) => {
-  event.reply("START_PROCESSING", {
-    data: cache.data,
-    currentPid: currentPid,
-    pythonPath: cache.pythonPath,
-  });
+ipcMain.on('process call 1', (event, args) => {
+  cache.data = args.number;
+	hiddenWindow.webContents.send('process run 1', {
+		data: cache.data,
+	});
 });
