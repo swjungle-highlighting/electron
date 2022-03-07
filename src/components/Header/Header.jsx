@@ -1,6 +1,5 @@
 import "./Header.scss";
-import { GiFilmProjector } from "react-icons/gi";
-import { FiLogIn } from "react-icons/fi";
+import { FiLogIn, FiUser, FiLogOut } from "react-icons/fi";
 import { GoSignIn } from "react-icons/go";
 import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -53,10 +52,8 @@ export default function Header() {
     if (target === "Home") {
       const result = window.confirm("홈페이지로 이동합니까?");
       if (result) {
-        alert("홈페이지로 이동합니다.");
         history.push("/");
       } else {
-        alert("이동을 취소합니다.");
       }
     }
   };
@@ -67,16 +64,33 @@ export default function Header() {
     setSignIn(true);
   };
 
+  const handleLogout = () => {
+    const result = window.confirm(
+      "로그아웃 하시면 홈페이지로 이동됩니다. 로그아웃 하시겠습니까?"
+    );
+    if (result) {
+      alert("로그아웃 되었습니다.");
+      onLogout();
+    } else {
+    }
+  };
+
   return (
     <div className="navbar">
       <ul className="menu">
         <li id="Home" onClick={onClickEvent}>
-          <GiFilmProjector /> HiGHLIGHTING
+          <img className="Logo" src={require("./auth/Image/icon.png")} />
+          HiGHLIGHTING
         </li>
         {logged ? (
           <div className="SignTool">
-            <li>마이 페이지</li>
-            <li onClick={onLogout}>로그아웃</li>
+            <li>
+              <FiUser className="purple" />
+              마이 페이지
+            </li>
+            <li onClick={handleLogout}>
+              <FiLogOut className="purple" /> 로그아웃
+            </li>
           </div>
         ) : (
           <div className="SignTool">
@@ -88,7 +102,7 @@ export default function Header() {
                 console.log("SignIn 값 : ", signIn);
               }}
             >
-              <GoSignIn /> 회원가입
+              <GoSignIn className="purple" /> 회원가입
             </li>
             <li
               id="LogIn"
@@ -97,7 +111,7 @@ export default function Header() {
                 setLogIn(true);
               }}
             >
-              <FiLogIn /> 로그인
+              <FiLogIn className="purple" /> 로그인
             </li>
           </div>
         )}
