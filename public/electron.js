@@ -52,6 +52,7 @@ let cache = {
 	url: undefined,
 	keywords: undefined,
 	cuts: undefined,
+	file: undefined,
 };
 
 
@@ -107,4 +108,17 @@ ipcMain.on('toElectron : process result [keywords search]', (event, args) => {
 	mainWindow.webContents.send('toApp : process result [keywords search]', args.message);
 });
 
+
+
+ipcMain.on('toElectron : process call [cuts output]', (event, args) => {
+	cache.cuts = args.cuts;
+	cache.file = args.file;
+	hiddenWindow.webContents.send('toBack : process call [cuts output]', {
+		cuts: cache.cuts,
+		file: cache.file,
+	});
+});
+ipcMain.on('toElectron : process result [cuts output]', (event, args) => {
+	mainWindow.webContents.send('toApp : process result [cuts output]', args.message);
+});
 

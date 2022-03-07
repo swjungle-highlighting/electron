@@ -27,6 +27,19 @@
 			ipcRenderer.send('toElectron : process result [keywords search]', { message: results });
 		});
 	});
+	
+	
+	ipcRenderer.on('toBack : process call [cuts output]', (event, args) => {
+		const { cuts, file } = args;
+		let pyshell = new PythonShell(path.join(__dirname, '/../scripts/cuts_output.py'), {
+			pythonPath: path.join(__dirname, '/../python/python.exe'),
+			args: [file, cuts],
+		});
+
+		pyshell.on('message', function (results) {
+			ipcRenderer.send('toElectron : process result [cuts output]', { message: results });
+		});
+	});
 
 
 	ipcRenderer.send('toElectron : background opening');

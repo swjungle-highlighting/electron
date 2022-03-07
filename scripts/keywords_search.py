@@ -31,7 +31,7 @@ if __name__ == '__main__':
     KEYWORDS = keywords.split(', ')
     Distribution = KeywordsSearch(URL_ID, KEYWORDS)
 
-    final_ret = {
+    ret = {
             "result" : {'distribution' : Distribution}
         }
-    print(json.dumps(final_ret))
+    print(json.dumps(ret))
