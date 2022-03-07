@@ -1,0 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+.card {
+  margin: 8px;
+  background-color: #323136;
+  border: 2px solid #151515;
+  border-radius: 10px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  width: 180px;
+  height: 190px;
+  padding: 8px;
+  .card-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .thumbnail {
+      display: inline-block;
+      justify-content: center;
+    }
+  }
+}
+.card-header img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0;
+  align-items: stretch;
+  //   padding: 10px;
+  //   min-height: 250px;
+  .memoAndDelete {
+    text-align: center;
+    align-items: center;
+    display: flex;
+    justify-content: right;
+  }
+}
+
+h4 {
+  all: unset;
+}
+
+.card-body p {
+  font-size: 13px;
+  //   margin: 0 0 40px;
+}
+.user {
+  display: flex;
+  margin-top: auto;
+}
+
+.user img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+.user-info h5 {
+  margin: 10px;
+}
