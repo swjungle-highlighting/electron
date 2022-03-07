@@ -57,7 +57,7 @@ const AppStateProvider = ({ children }) => {
   }
 
   function requestResult(url) {
-    ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
+    ipcRenderer.on('toApp : process result [stream analysis]', (event, args) => {
       try{
         let data = JSON.parse(args)
         console.log(data)
@@ -96,8 +96,8 @@ const AppStateProvider = ({ children }) => {
         goNotFound();
       }
   	});
-    ipcRenderer.send('process call 1', {
-  		number: url,
+    ipcRenderer.send('toElectron : process call [stream analysis]', {
+  		url: url,
   	});
     goLoading();
   }
@@ -167,6 +167,44 @@ const AppStateProvider = ({ children }) => {
   //   goLoading();
   // }
 
+
+  function requestKeywordsData(url, keywords) {
+    ipcRenderer.once('toApp : process result [keywords search]', (event, args) => {
+      let data = JSON.parse(args)
+      const objChatKeywords = data.result.distribution.map(
+        (value, index) => ({ x: index, y: value })
+      );
+      setChatKeywords(objChatKeywords);
+      setIsKeywordsDownload((prev) => prev + 1);
+  	});
+    ipcRenderer.send('toElectron : process call [keywords search]', {
+  		url: url,
+      keywords: keywords,
+  	});
+  }
+
+  // function requestKeywordsData(url, keywords) {
+  //   console.log("call getMethod()");
+  //   axios
+  //     .post(server_addr + "/flask/keywords", {
+  //       url: url,
+  //       keywords: keywords,
+  //     })
+  //     .then((response) => {
+  //       console.log("Success", response.data);
+  //       const objChatKeywords = response.data.result.distribution.map(
+  //         (value, index) => ({ x: index, y: value })
+  //       );
+  //       setChatKeywords(objChatKeywords);
+  //       setIsKeywordsDownload((prev) => prev + 1);
+  //     })
+  //     .catch((error) => {
+  //       console.log("keyword 요청실패");
+  //       console.log(error);
+  //       alert("키워드 검색요청에 실패하였습니다.");
+  //     });
+  // }
+
   function getMethodKeywords(e) {
     console.log("call getMethod()");
     axios
@@ -178,28 +216,6 @@ const AppStateProvider = ({ children }) => {
         console.log("get메소드 에러");
         console.log(error);
         alert("요청에 실패하였습니다.");
-      });
-  }
-
-  function requestKeywordsData(url, keywords) {
-    console.log("call getMethod()");
-    axios
-      .post(server_addr + "/flask/keywords", {
-        url: url,
-        keywords: keywords,
-      })
-      .then((response) => {
-        console.log("Success", response.data);
-        const objChatKeywords = response.data.result.distribution.map(
-          (value, index) => ({ x: index, y: value })
-        );
-        setChatKeywords(objChatKeywords);
-        setIsKeywordsDownload((prev) => prev + 1);
-      })
-      .catch((error) => {
-        console.log("keyword 요청실패");
-        console.log(error);
-        alert("키워드 검색요청에 실패하였습니다.");
       });
   }
 

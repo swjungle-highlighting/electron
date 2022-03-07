@@ -3,17 +3,31 @@
 	const { ipcRenderer } = require('electron');
 	const path = require('path');
 
-	ipcRenderer.on('process run 1', (event, args) => {
-		const { data } = args;
-		let pyshell = new PythonShell(path.join(__dirname, '/../scripts/test.py'), {
+	ipcRenderer.on('toBack : process call [stream analysis]', (event, args) => {
+		const { url } = args;
+		let pyshell = new PythonShell(path.join(__dirname, '/../scripts/stream_analysis.py'), {
 			pythonPath: path.join(__dirname, '/../python/python.exe'),
-			args: [data]
+			args: [url],
 		});
 
-		pyshell.on('message', function(results) {
-			ipcRenderer.send('MESSAGE_FROM_BACKGROUND', { message: results });
+		pyshell.on('message', function (results) {
+			ipcRenderer.send('toElectron : process result [stream analysis]', { message: results });
 		});
 	});
 
-	ipcRenderer.send('background open');
+
+	ipcRenderer.on('toBack : process call [keywords search]', (event, args) => {
+		const { url, keywords } = args;
+		let pyshell = new PythonShell(path.join(__dirname, '/../scripts/keywords_search.py'), {
+			pythonPath: path.join(__dirname, '/../python/python.exe'),
+			args: [url, keywords],
+		});
+
+		pyshell.on('message', function (results) {
+			ipcRenderer.send('toElectron : process result [keywords search]', { message: results });
+		});
+	});
+
+
+	ipcRenderer.send('toElectron : background opening');
 </script>

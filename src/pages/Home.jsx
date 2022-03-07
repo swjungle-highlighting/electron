@@ -5,9 +5,6 @@ import useRoute from "../hooks/useRoute";
 import Header from "../components/Header/Header";
 import "./Home.scss";
 
-const electron = window.require('electron');
-const { ipcRenderer } = electron;
-
 
 export default function Home() {
   const inputValue = document.getElementById("link");

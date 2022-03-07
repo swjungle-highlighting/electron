@@ -13,13 +13,13 @@ function createWindow() {
 	const startUrl = process.env.DEV
 		? 'http://localhost:3000'
 		: url.format({
-				pathname: path.join(__dirname, '/../build/index.html'),
-				protocol: 'file:',
-				slashes: true,
-		  });
+			pathname: path.join(__dirname, '/../build/index.html'),
+			protocol: 'file:',
+			slashes: true,
+		});
 	mainWindow = new BrowserWindow({
-    width: 1920,
-    height: 1280,
+		width: 1920,
+		height: 1280,
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
@@ -29,7 +29,7 @@ function createWindow() {
 	mainWindow.loadURL(startUrl);
 	process.env.DEV && mainWindow.webContents.openDevTools();
 
-	mainWindow.on('closed', function() {
+	mainWindow.on('closed', function () {
 		mainWindow = null;
 	});
 }
@@ -48,21 +48,16 @@ app.on('activate', () => {
 	}
 });
 
-// ------------------- set up event listeners here --------------------
-
-// temporary variable to store data while background
-// process is ready to start processing
 let cache = {
-	data: undefined,
+	url: undefined,
+	keywords: undefined,
+	cuts: undefined,
 };
 
-// a window object outside the function scope prevents
-// the object from being garbage collected
+
 let hiddenWindow;
 
-// This event listener will listen for request
-// from visible renderer process
-ipcMain.on('start background', (event, args) => {
+ipcMain.on('toElectron : start background', (event, args) => {
 	const backgroundFileUrl = url.format({
 		pathname: path.join(__dirname, `../background_tasks/background.html`),
 		protocol: 'file:',
@@ -82,21 +77,34 @@ ipcMain.on('start background', (event, args) => {
 		hiddenWindow = null;
 	});
 });
+ipcMain.on('toElectron : background opening', (event, args) => {
 
-// This event listener will listen for data being sent back
-// from the background renderer process
-ipcMain.on('MESSAGE_FROM_BACKGROUND', (event, args) => {
-	mainWindow.webContents.send('MESSAGE_FROM_BACKGROUND_VIA_MAIN', args.message);
+	mainWindow.webContents.send('toApp : background opening', 'background open');
 });
 
-ipcMain.on('background open', (event, args) => {
 
-	mainWindow.webContents.send('background open alert', 'background open');
-});
 
-ipcMain.on('process call 1', (event, args) => {
-  cache.data = args.number;
-	hiddenWindow.webContents.send('process run 1', {
-		data: cache.data,
+ipcMain.on('toElectron : process call [stream analysis]', (event, args) => {
+	cache.url = args.url;
+	hiddenWindow.webContents.send('toBack : process call [stream analysis]', {
+		url: cache.url,
 	});
 });
+ipcMain.on('toElectron : process result [stream analysis]', (event, args) => {
+	mainWindow.webContents.send('toApp : process result [stream analysis]', args.message);
+});
+
+
+
+ipcMain.on('toElectron : process call [keywords search]', (event, args) => {
+	cache.keywords = args.keywords;
+	hiddenWindow.webContents.send('toBack : process call [keywords search]', {
+		url: cache.url,
+		keywords: cache.keywords,
+	});
+});
+ipcMain.on('toElectron : process result [keywords search]', (event, args) => {
+	mainWindow.webContents.send('toApp : process result [keywords search]', args.message);
+});
+
+

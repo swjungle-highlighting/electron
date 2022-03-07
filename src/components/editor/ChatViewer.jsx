@@ -6,6 +6,8 @@ import useResult from "../../hooks/useResult";
 import { format } from "./in_VideoPlayer/Duration";
 import "./ChatViewer.scss";
 
+
+
 function ChatViewer({ url, duration }) {
   const {
     replayRef,
@@ -74,7 +76,6 @@ function ChatViewer({ url, duration }) {
     if (keywords === "") {
       setKeywords("키워드를 입력해주세요.");
     } else {
-      console.log("url", url, "keywords", keywords);
       // getMethodKeywords(e);
       requestKeywordsData(url, keywords);
       localStorage.setItem("localSearchKeywords", keywords);
@@ -132,7 +133,6 @@ function ChatViewer({ url, duration }) {
             console.log('ctrl keydown')
             return;
           case "KeyS":
-            console.log(event)
             if (
               replayRef.current.subKey.isShiftKey &&
               replayRef.current.subKey.isCtrlKey

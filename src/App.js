@@ -15,9 +15,9 @@ const { ipcRenderer } = electron;
 
 class App extends Component {
   componentDidMount() {
-		ipcRenderer.on('background open alert', (event, args) => {
+		ipcRenderer.on('toApp : background opening', (event, args) => {
 		});
-		ipcRenderer.send('start background', {
+		ipcRenderer.send('toElectron : start background', {
 		});
 	}
 
