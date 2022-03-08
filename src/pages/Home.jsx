@@ -132,7 +132,7 @@ const Home = () => {
             {/* 좌상단 소개 페이지 */}
             <div>
               <h1 className="HC1_heading anim">
-                <img className="HC1-logo" src={require("./image/icon.png")} />
+                <img className="HC1-logo" src="Logo.png" alt="Logo" />
                 HIGHLIGHTING
               </h1>
               <p className="HC1-p1">
@@ -165,7 +165,7 @@ const Home = () => {
           <div className="upper_right_container">
             {/* 우상단 URL 입력창 */}
             <div className="Home_urlInput">
-              <h1> <img className="HC1-logo" src={require("./image/icon.png")} /> </h1>
+              <h1> <img className="HC1-logo" src="Logo.png" alt="Logo" /> </h1>
               <input
                 className="InputBar"
                 ref={urlInput}
@@ -301,7 +301,7 @@ const Home = () => {
                 <div className="GuideLine_content">
                   <h2>HIGHLIGHTING 사용방법</h2>
                   <div className="guide_content_box">
-                    <img src={require("./image/Step0.png")} />
+                    <img src="Step0.png" alt = "step"/>
                     <p className="guide_content_p1">
                       1.메인페이지 URL창에 유튜브 다시보기 URL을 입력한다.
                     </p>

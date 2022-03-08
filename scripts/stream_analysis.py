@@ -7,5 +7,6 @@ import json
 sys.stderr = sys.stdout
 
 if __name__ == '__main__':
+    print('run')
     result = streamProcess(sys.argv[1])
     print(json.dumps(result))

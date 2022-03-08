@@ -41,6 +41,7 @@ const AppStateProvider = ({ children }) => {
 
   function requestResult(url) {
     ipcRenderer.on('toApp : process result [stream analysis]', (event, args) => {
+      console.log(args)
       try{
         let data = JSON.parse(args)
         localStorage.setItem("localDuration", data.duration);
@@ -75,7 +76,6 @@ const AppStateProvider = ({ children }) => {
 
       }catch(e){
         console.log(e)
-        goNotFound();
       }
   	});
     ipcRenderer.send('toElectron : process call [stream analysis]', {

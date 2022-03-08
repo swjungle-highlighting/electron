@@ -92,7 +92,9 @@
       "public/Logo.png",
       "node_modules/**/*",
       "scripts/*",
-      "chat_storage/dummy"
+      "storage_chat/dummy",
+      "storage_dummy/dummy.png",
+      "storage_sprite/dummy"
     ],
     "extends": null
   }

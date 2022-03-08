@@ -16,10 +16,6 @@ SAMPLERATE = 11025
 GETPICK_PERSEC = 2
 
 def audioProcess(url_id):
-    # print("########################################################")
-    # print('audio ' + url_id)
-    # print("########################################################")
-    """"""
 
     folder = os.getcwd()
     target = ''

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 
 import EditorTimePointerContext from "../../contexts/EditorTimePointerContext";
-import FFmpegContext from "../../contexts/FFmpegContext";
 import { format } from "./in_VideoPlayer/Duration";
 import axios from "axios";
 
@@ -29,7 +28,6 @@ function BookMarker({ url, duration, bookmarker }) {
   const { markers, setMarkers, setRelay } = useResult();
 
   const fileMp3Html = useRef(null);
-  const ffmpeg = useContext(FFmpegContext);
   const [downloadLink, setDownloadLink] = useState("");
   const bookscroll = document.querySelector("#bookmarkScroll");
   useEffect(() => {
@@ -45,10 +43,8 @@ function BookMarker({ url, duration, bookmarker }) {
   useEffect(() => {
     if (!replayRef) return;
     replayRef.current.saveMarker = handleClick;
-    replayRef.current.cutMarker.doExport = doExport;
   }, [url, markers]);
 
-  // 내보내기 위해 원본 파일명 읽기
   const getFile = (file) => {
     if (file.current && file.current.files && file.current.files.length !== 0) {
       console.log(
@@ -63,7 +59,6 @@ function BookMarker({ url, duration, bookmarker }) {
     }
   };
 
-  // 선택된 북마크들로부터 시간 리스트로 읽기
   const getMarkerTime = (markerList) => {
     const selectedMarkers = [...markers].filter(
       (marker) => marker.completed === true
@@ -83,100 +78,10 @@ function BookMarker({ url, duration, bookmarker }) {
     return cutTimeList;
   };
 
-  // 내보내기 위해 원본파일 이름에서 시퀸스 번호 붙이기
-  const inputToOutName = (inputName, index) => {
-    if (inputName) {
-      const [name, ext] = inputName.split(".");
-      return name + "-" + (index + 1) + "." + ext;
-    }
-  };
 
-  // 모달창
-  // const openModal = () => {
-  //   document.body.style.overflow = "hidden";
-  //   setModalOpen(true);
-  // };
-  // const closeModal = () => {
-  //   document.body.style.overflow = "unset";
-  //   setModalOpen(false);
-  // };
-
-  // 내보내기 작업 함수
-  const doExport = async () => {
-    replayRef.current.cutMarker.message = "Loading ffmpeg-core.js";
-    // setMessage("Loading ffmpeg-core.js");
-    if (!ffmpeg.isLoaded()) {
-      await ffmpeg.load();
-    }
-    const mp4 = getFile(fileMp3Html);
-    if (mp4) {
-      ffmpeg.FS(
-        "writeFile",
-        "input.mp4",
-        new Uint8Array(await mp4.arrayBuffer())
-      );
-      replayRef.current.cutMarker.message = "Start Export";
-      // setMessage("Start Export");
-      console.log("markers in mp4 in async", markers);
-      const cutTimeList = getMarkerTime(markers);
-      let i = 0;
-      // 북마크 개수만큼 자르자!
-      while (i < cutTimeList.length) {
-        console.log("while", "i", i, "cutTimeList", cutTimeList);
-        //   ffmpeg -ss 00:00:00 -to 01:00:00  -i input.mp4 -c copy out.mp4
-        const outName = inputToOutName(mp4.name, i);
-        const start = format(cutTimeList[i].start);
-        const end = format(cutTimeList[i].end);
-        const args = [
-          "-ss",
-          start,
-          "-to",
-          end,
-          "-i",
-          "input.mp4",
-          "-c",
-          "copy",
-          "outfile.mp4",
-        ];
-        await ffmpeg.run(...args);
-        replayRef.current.cutMarker.message = `Complete ${
-          i + 1
-        }개 파일을 받았습니다.`;
-        // setMessage(`Complete ${i + 1}개 파일을 받았습니다.`);
-        console.log("outName", outName);
-        const data = ffmpeg.FS("readFile", "outfile.mp4");
-        URL.revokeObjectURL(downloadLink);
-        // setOutName(outName);
-        const tmpDownloadlink = URL.createObjectURL(
-          new Blob([data.buffer], { type: "video/mp4" })
-        );
-        setDownloadLink(tmpDownloadlink);
-        const link = document.createElement("a");
-        link.href = tmpDownloadlink;
-        link.setAttribute("download", outName);
-
-        // Append to html link element page
-        document.body.appendChild(link);
-
-        // Start download
-        link.click();
-
-        // Clean up and remove the link
-        link.parentNode.removeChild(link);
-
-        // 인덱스 +1
-        i++;
-      }
-      ffmpeg.FS("unlink", "input.mp4");
-      ffmpeg.FS("unlink", "outfile.mp4");
-    } else {
-    }
-  };
-
-  // 북마크 저장
   function handleClick(e) {
     if (e) {
-      e.preventDefault(); //새로고침 되지않게 막음!
+      e.preventDefault();
     }
     if (seeking) return;
     console.log(`is replayRef?`, replayRef.current);
@@ -215,7 +120,6 @@ function BookMarker({ url, duration, bookmarker }) {
       }
     }
   }
-
 
   function deleteMarker(id) {
     const updateMarkers = [...markers].filter((marker) => marker.id !== id);
@@ -271,15 +175,12 @@ function BookMarker({ url, duration, bookmarker }) {
     console.log("seekto 함수로 영상재생");
   }
 
-
-
   const handleKeyPress = (event, id) => {
     if (event.key === "Enter") {
       console.log("enter press here! ");
       addMemoEdit(id);
     }
   };
-
 
   const mounted = useRef([false]);
   useEffect(() => {

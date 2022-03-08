@@ -15,6 +15,8 @@ from api.audio.audioProcess import audioProcess
 from api.video.videoProcess import videoProcess
 from api.chat.chatProcess import chatProcess
 
+from api.extract.spriteExtract import make_sprite
+
 def _sec_to_str(sec) :
     t = []
     t.append(sec %60)
@@ -51,7 +53,6 @@ def mulitProcessing(input_file, duration, index, audio, video ,CUT_RANGE):
         index += 1
 
 def streamProcess(url):
-    # print('::stream::')
     url_id = url.split("=")[1]
 
     if len(url_id) != 11:
@@ -73,10 +74,12 @@ def streamProcess(url):
     pool = multiprocessing.Pool(processes=1)
     chat = pool.starmap_async(chatProcess, [(url_id, duration)])
     mulitProcessing(input_file, duration, index, audio, video, CUT_RANGE)
+    make_sprite(url_id+'.mp4')
 
     chat = chat.get()[0]
     pool.close()
     pool.join()
+
 
     folder = os.getcwd()
     target = ''

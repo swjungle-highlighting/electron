@@ -4,7 +4,7 @@ from api.HelperFunctions import _cut_time_and_messageset, AhoCorasick
 
 def KeywordsSearch(URL_ID, KEYWORDS) : 
     ACtrie = AhoCorasick(KEYWORDS)
-    chat_file = open('./chat_storage/'+URL_ID+'.txt', "r", encoding = 'UTF8')
+    chat_file = open('./storage_chat/'+URL_ID+'.txt', "r", encoding = 'UTF8')
     duration, _ = _cut_time_and_messageset(chat_file.readline().rstrip())
     target = chat_file.readline()
     Distribution = [0 for i in range(duration//60 +1)]

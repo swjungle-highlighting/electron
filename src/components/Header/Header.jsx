@@ -79,7 +79,7 @@ export default function Header() {
     <div className="navbar">
       <ul className="menu">
         <li id="Home" onClick={onClickEvent}>
-          <img className="Logo" src={require("./auth/Image/icon.png")} />
+          <img className="Logo" src="Logo.png" alt="Logo" />
           HiGHLIGHTING
         </li>
         {logged ? (

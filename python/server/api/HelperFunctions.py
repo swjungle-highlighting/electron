@@ -4,7 +4,7 @@ import zipfile
 import json
 
 ##################################################################################
-## parse elapsetime and chatdata from /chat_storage textfile
+## parse elapsetime and chatdata from /storage_chat textfile
 digit = ['0','1','2','3','4','5','6','7','8','9']
 def _cut_time_and_messageset(line) :
     i = 0
@@ -15,10 +15,10 @@ def _cut_time_and_messageset(line) :
     return int(elapsetime), line[i+1:]
 
 ##################################################################################
-## return dict(JSON) type MessageSet for front from /chat_storage textfile
+## return dict(JSON) type MessageSet for front from /storage_chat textfile
 def return_MessageSet(URL_ID) : 
     MessageSet = {}
-    chat_file = open('./chat_storage/'+URL_ID+'.txt', "r", encoding = 'UTF8')
+    chat_file = open('./storage_chat/'+URL_ID+'.txt', "r", encoding = 'UTF8')
     _1, _2 = _cut_time_and_messageset(chat_file.readline().rstrip())
     target = chat_file.readline().rstrip()
     i = 0

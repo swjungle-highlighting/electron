@@ -233,13 +233,12 @@ const ControllerButtonBox = ({ url, duration }) => {
           close={closeModal}
           Header="내보내기"
         >
-          <p>
-            {replayRef?.current ? replayRef.current.cutMarker.message : null}
-          </p>
-          <input ref={fileMp3Html} id="mp4" type="file" accept=".mp4" />
+          <input ref={fileMp3Html} id="mp4" type="file" accept=".mp4" onChange={()=>{
+            console.log(fileMp3Html.current.files[0].path);
+            }} />
           <button
             onClick={
-              replayRef?.current ? replayRef.current.cutMarker.doExport : null
+              ()=>{console.log(fileMp3Html.current.files[0].path)}
             }
           >
             Start
@@ -247,7 +246,6 @@ const ControllerButtonBox = ({ url, duration }) => {
         </Modal>
       )}
 
-      {/* 체크용 */}
     </div>
   );
 };
