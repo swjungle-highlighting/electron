@@ -3,6 +3,13 @@
 
 # production
 /build
+/dist
+
+# files
+/storage_dummy
+/storage_chat
+/resources
+
 
 # misc
 .DS_Store
@@ -10,7 +17,5 @@
 .env.development.local
 .env.test.local
 .env.production.local
-
-/dist
 
 npm-debug.log*
