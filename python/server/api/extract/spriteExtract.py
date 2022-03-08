@@ -4,7 +4,7 @@ import ffmpeg
 
 
 CUT_PATH = "./resources/app/storage_dummy"
-SC_PATH = "./resources/app/storage_sprite"
+SC_PATH = "./resources/app/build"
 SEC = 10
 COL_SPRITE = 60 //SEC
 W, H = 177, 100

@@ -93,8 +93,7 @@
       "node_modules/**/*",
       "scripts/*",
       "storage_chat/dummy",
-      "storage_dummy/dummy.png",
-      "storage_sprite/dummy"
+      "storage_dummy/dummy.png"
     ],
     "extends": null
   }

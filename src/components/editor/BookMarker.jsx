@@ -213,9 +213,7 @@ function BookMarker({ url, duration, bookmarker }) {
                   <div
                     className="thumbnail"
                     style={{
-                      background: `url(${server_addr}/${
-                        url?.split("=")[1]
-                      }.jpg)`,
+                      background: `url(${url?.split("=")[1]}.jpg)`,
                       width: "176px",
                       height: "100px",
                       backgroundRepeat: "no-repeat",

@@ -1192,7 +1192,7 @@ const DataChart = (props) => {
         onMouseMove={handleMouseMoveInChart}
       ></div>
       {url ? <div id="result" ref={imgTipRef} style={{
-        display: (tip ? 'block' : 'none'), position: "absolute", background: `url(${server_addr}/${url?.split("=")[1]}.jpg)`,
+        display: (tip ? 'block' : 'none'), position: "absolute", background: `url(${url?.split("=")[1]}.jpg)`,
         width: "176px", height: "100px", backgroundRepeat: "no-repeat",
         backgroundPosition: 
           `${-177 * Math.floor(Math.floor(tip % 60) / 10) - 1}px  ${-100 * Math.floor(tip / 60)}px`,
