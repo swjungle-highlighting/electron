@@ -13,6 +13,7 @@ function EditorTimePointerProvider({ children }) {
   const [playerRef, setPlayerRef] = useState(undefined);
   const [replayRef, setReplayRef] = useState(undefined);
   const [dataChangeRef, setDataChangeRef] = useState(undefined);
+  const [fileMp4HtmlRef, setFileMp4HtmlRef] = useState('');
 
   function callSeekTo(value) {
     playerRef.seekTo(parseFloat(value));
@@ -34,6 +35,7 @@ function EditorTimePointerProvider({ children }) {
         callReply, 
         replayRef, setReplayRef,
         dataChangeRef, setDataChangeRef,
+        fileMp4HtmlRef, setFileMp4HtmlRef
       }}
     >
       {children}

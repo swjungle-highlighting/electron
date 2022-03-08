@@ -111,15 +111,15 @@ ipcMain.on('toElectron : process result [keywords search]', (event, args) => {
 
 
 
-ipcMain.on('toElectron : process call [cuts output]', (event, args) => {
-	cache.cuts = args.cuts;
+ipcMain.on('toElectron : process call [cuts export]', (event, args) => {
 	cache.file = args.file;
-	hiddenWindow.webContents.send('toBack : process call [cuts output]', {
-		cuts: cache.cuts,
+	cache.cuts = args.cuts;
+	hiddenWindow.webContents.send('toBack : process call [cuts export]', {
 		file: cache.file,
+		cuts: cache.cuts,
 	});
 });
-ipcMain.on('toElectron : process result [cuts output]', (event, args) => {
-	mainWindow.webContents.send('toApp : process result [cuts output]', args.message);
+ipcMain.on('toElectron : process result [cuts export]', (event, args) => {
+	mainWindow.webContents.send('toApp : process result [cuts export]', args.message);
 });
 

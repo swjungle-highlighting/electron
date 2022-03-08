@@ -14,6 +14,7 @@ const ControllerButtonBox = ({ url, duration }) => {
     callSeekTo,
     setPlayed,
     changePointer,
+    setFileMp4HtmlRef,
   } = React.useContext(EditorTimePointerContext);
   const {
     requestKeywordsData,
@@ -27,9 +28,14 @@ const ControllerButtonBox = ({ url, duration }) => {
   const isTypingRef = useRef(false);
 
   // 내보내기 관련
-  const fileMp3Html = useRef(null);
+  const fileMp4Html = useRef(null);
   const [modalOpen, setModalOpen] = useState(false);
   // const [outName, setOutName] = useState("");
+
+  useEffect(() => {
+    if (!fileMp4Html) return;
+    setFileMp4HtmlRef(fileMp4Html);
+  }, [fileMp4Html])
 
   // 모달창
   const openModal = () => {
@@ -208,6 +214,11 @@ const ControllerButtonBox = ({ url, duration }) => {
               isTypingRef.current = false;
               console.log("블러 이벤트입니다.", isTypingRef.current);
             }}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                keywordSearchEvent();
+              }
+            }}
           />
           <button className="Search">
             <span onClick={keywordSearchEvent}>검색</span>
@@ -233,12 +244,13 @@ const ControllerButtonBox = ({ url, duration }) => {
           close={closeModal}
           Header="내보내기"
         >
-          <input ref={fileMp3Html} id="mp4" type="file" accept=".mp4" onChange={()=>{
-            console.log(fileMp3Html.current.files[0].path);
-            }} />
+          <p>
+            {replayRef?.current ? replayRef.current.cutMarker.message : null}
+          </p>
+          <input ref={fileMp4Html} id="mp4" type="file" accept=".mp4" />
           <button
             onClick={
-              ()=>{console.log(fileMp3Html.current.files[0].path)}
+              replayRef?.current ? replayRef.current.cutMarker.doExport : null
             }
           >
             Start

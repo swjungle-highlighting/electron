@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 
 import EditorTimePointerContext from "../../contexts/EditorTimePointerContext";
 import { format } from "./in_VideoPlayer/Duration";
-import axios from "axios";
 
 import "./BookMarker.scss";
 import useResult from "../../hooks/useResult";
@@ -20,16 +19,15 @@ function BookMarker({ url, duration, bookmarker }) {
     seeking,
     setSeeking,
     replayRef,
+    fileMp4HtmlRef,
   } = React.useContext(EditorTimePointerContext);
-  const { server_addr } = useResult();
   const [addMarker, setAddMarker] = useState(null);
   const [editingText, setEditingText] = useState("");
   const [isStart, setIsStart] = useState(false);
-  const { markers, setMarkers, setRelay } = useResult();
+  const { markers, setMarkers, setRelay, requestExportCut } = useResult();
 
-  const fileMp3Html = useRef(null);
-  const [downloadLink, setDownloadLink] = useState("");
   const bookscroll = document.querySelector("#bookmarkScroll");
+
   useEffect(() => {
     const temp = JSON.stringify(markers);
     localStorage.setItem("markers", temp);
@@ -43,41 +41,41 @@ function BookMarker({ url, duration, bookmarker }) {
   useEffect(() => {
     if (!replayRef) return;
     replayRef.current.saveMarker = handleClick;
+    replayRef.current.cutMarker.doExport = doExport;
   }, [url, markers]);
 
-  const getFile = (file) => {
-    if (file.current && file.current.files && file.current.files.length !== 0) {
-      console.log(
-        "file.current",
-        file.current,
-        "file.current.files",
-        file.current.files
-      );
-      return file.current.files[0];
-    } else {
-      return null;
-    }
-  };
-
-  const getMarkerTime = (markerList) => {
+  const getMarker = () => {
     const selectedMarkers = [...markers].filter(
       (marker) => marker.completed === true
     );
-    const cutTimeList = selectedMarkers?.map((marker) => ({
+    const cutList = selectedMarkers?.map((marker) => ({
       start: marker.startPointer,
       end: marker.endPointer,
+      text: marker.text ? marker.text : 'notitle'
     }));
-    console.log(
-      "markers",
-      markerList,
-      "selectedMarkers",
-      selectedMarkers,
-      "getMarkerTime",
-      cutTimeList
-    );
-    return cutTimeList;
+    return cutList;
   };
 
+  const doExport = async () => {
+    if (!fileMp4HtmlRef.current.files[0]){
+      return;
+    }
+    const cutList = getMarker(markers);
+    let args = '';
+    let i = 0;
+    while (i < cutList.length) {
+      args += '[cut]';
+      args += cutList[i].start;
+      args += ' ';
+      args += cutList[i].end;
+      args += ' ';
+      args += cutList[i].text;
+      i += 1;
+    }
+    console.log(fileMp4HtmlRef.current.files[0].path);
+    console.log(args);
+    requestExportCut(fileMp4HtmlRef.current.files[0].path, args);
+  };
 
   function handleClick(e) {
     if (e) {
@@ -158,8 +156,6 @@ function BookMarker({ url, duration, bookmarker }) {
         setSeeking(true);
         const playTime = marker.startPointer;
         const playTimeRatio = playTime / parseInt(duration);
-        console.log(`duration`, duration, "playerTimeRatio", playTimeRatio);
-        console.log(`duration's type`, typeof duration);
         callSeekTo(playTimeRatio);
         setPlayed(parseFloat(playTimeRatio));
         changePointer(playTime);
@@ -169,10 +165,8 @@ function BookMarker({ url, duration, bookmarker }) {
         replayRef.current.endTime = marker.endPointer;
         replayRef.current.playingId = marker.id;
         setRelay((prev) => (prev = true));
-        console.log("marker click play", replayRef.current);
       }
     });
-    console.log("seekto 함수로 영상재생");
   }
 
   const handleKeyPress = (event, id) => {
@@ -196,7 +190,6 @@ function BookMarker({ url, duration, bookmarker }) {
   return (
     <>
       <div className="BookMarkerContainer">
-
         <h2>📁 컷 보관함</h2>
         <h3>드래그로 선택한 구간을 컷으로 저장할 수 있어요 (Ctrl+Shift+S)</h3>
         <div className="hello" id="bookmarkScroll">

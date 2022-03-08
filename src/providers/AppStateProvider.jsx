@@ -98,6 +98,20 @@ const AppStateProvider = ({ children }) => {
       keywords: keywords,
   	});
   }
+
+  function requestExportCut(file, cuts) {
+    console.log("cuts export start");
+    ipcRenderer.on('toApp : process result [cuts export]', (event, args) => {
+      console.log(args);
+  	});
+    ipcRenderer.send('toElectron : process call [cuts export]', {
+  		file: file,
+      cuts: cuts,
+  	});
+  }
+
+
+
   function onLogin() {
     setLogged(true);
   }
@@ -157,6 +171,7 @@ const AppStateProvider = ({ children }) => {
         onLogout,
         requestKeywordsData,
         requestResult,
+        requestExportCut,
         goEditor,
         goLoading,
         goNotFound,

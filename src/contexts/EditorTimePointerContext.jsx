@@ -17,6 +17,8 @@ const EditorTimePointerContext = React.createContext({
   callReplay: () => {},
   dataChangeRef: undefined,
   setDataChangeRef: () => {},
+  fileMp4HtmlRef: '',
+  setFileMp4HtmlRef: () => {},
 });
 
 export default EditorTimePointerContext;
