@@ -9,7 +9,9 @@
 import multiprocessing
 import os
 import subprocess
+import locale
 import yt_dlp
+import time
 
 from api.audio.audioProcess import audioProcess
 from api.video.videoProcess import videoProcess
@@ -29,6 +31,15 @@ def _sec_to_str(sec) :
             t[i] = str(t[i])
     return t[2]+':'+t[1]+':'+t[0]
 
+digit = ['0','1','2','3','4','5','6','7','8','9']
+def _cut_time_and_messageset(line) :
+    i = 0
+    elapsetime = ''
+    while line[i] in digit :
+        elapsetime += line[i]
+        i += 1
+    return int(elapsetime), line[i+1:]
+
 CUT_RANGE = 600
 def _do_subprocess(input_file, duration, index, audio, video) :
     output_file = str(index) + input_file
@@ -40,24 +51,34 @@ def _do_subprocess(input_file, duration, index, audio, video) :
     video += videoProcess(output_file)
     os.remove(os.getcwd() + "/" + output_file)
 
-opts = {
-    'ignoreerrors' : True,
-    'nooverwrites' : True,
-    'format' : 'worstvideo[height<=144]+worstaudio/worst[height<=144]/worst',
-    'outtmpl' : './%(id)s.%(ext)s',
-}
+def _check_platform(url) : 
+    if url[:32] == "https://www.youtube.com/watch?v=" : 
+        return 1, url[32:]
+    if url[:29] == "https://www.twitch.tv/videos/" : 
+        return 2, url[29:]
+    return 0, None
+
 
 def mulitProcessing(input_file, duration, index, audio, video ,CUT_RANGE):
     while index <= duration // CUT_RANGE:
         _do_subprocess(input_file, duration, index, audio, video)
         index += 1
 
-def streamProcess(url):
-    url_id = url.split("=")[1]
+opts = {
+    'ignoreerrors' : True,
+    'nooverwrites' : True,
+    'format' : 'worstvideo[height<=144]+worstaudio/worst[height<=144]/worst',
+    'outtmpl' : './%(id)s.%(ext)s',
+}
+err = {
+    'message' : 'error'
+}
 
-    if len(url_id) != 11:
-        return False
-
+def streamProcess(url) :
+    code, url_id = _check_platform(url)
+    if not url_id : 
+        return err
+    
     with yt_dlp.YoutubeDL(opts) as ydl:
         ydl.download([url])
         info_dict = ydl.extract_info(url, download=False)
@@ -65,16 +86,17 @@ def streamProcess(url):
         title = info_dict.get('title')
         thumbnail = info_dict.get('thumbnail')
 
-    ### parallel processing
     audio = []
     video = []
     input_file = url_id + '.mp4'
+    if code == 2 : 
+        input_file = 'v' + input_file
     index = 0
 
     pool = multiprocessing.Pool(processes=1)
-    chat = pool.starmap_async(chatProcess, [(url_id, duration)])
+    chat = pool.starmap_async(chatProcess, [(url_id, duration, code)])
     mulitProcessing(input_file, duration, index, audio, video, CUT_RANGE)
-    make_sprite(url_id+'.mp4')
+    make_sprite(input_file)
 
     chat = chat.get()[0]
     pool.close()

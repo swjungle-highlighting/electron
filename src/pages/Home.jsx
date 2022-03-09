@@ -24,46 +24,28 @@ const Home = () => {
   });
 
   function linkCheck() {
-    if (inputValue === null) {
+    console.log(url);
+    if (!url) {
       alert("빈 값입니다. 입력창에 유튜브 주소를 입력해 주세요.");
       focusUrl();
       return;
-    } else if (inputValue !== null) {
-      const gapCheck = inputValue.value.split(" ");
-      const correctLink = inputValue.value.substr(0, 32);
-      const backAddressCheck = inputValue.value.split("=");
-      if (gapCheck.length === 2) {
-        alert(
-          "유튜브 링크에 공백 문자가 포함되어 있습니다. 공백 문자를 제거한 주소를 입력해 주세요."
-        );
-        focusUrl();
-        return;
-      }
-      if (correctLink !== "https://www.youtube.com/watch?v=") {
-        alert(
-          "올바른 유튜브 주소가 아닙니다. 올바른 유튜브 링크 주소를 입력해 주세요1."
-        );
-        console.log(correctLink);
-        focusUrl();
-        return;
-      }
-      if (backAddressCheck[1].length !== 11) {
-        console.log(backAddressCheck, backAddressCheck[1].length);
-        alert(
-          "올바른 유튜브 주소가 아닙니다. 올바른 유튜브 링크 주소를 입력해 주세요2."
-        );
-        focusUrl();
-        return;
-      }
-      sendUrl();
     }
-  }
+    else {
+      const isYT = url.substr(0, 32) === "https://www.youtube.com/watch?v=";
+      const isTW = url.substr(0, 29) === "https://www.twitch.tv/videos/";
 
-  function sendUrl(e) {
-    console.log("call sendUrl()");
-    if (inputValue && inputValue.value) {
-      console.log("인풋창 입력값 : ", inputValue.value);
-      requestResult(url);
+      if (isYT) {
+        requestResult(url.substr(0, 43));
+        setUrl(url.substr(0, 43));
+        return;
+      }
+      if (isTW) {
+        requestResult(url.substr(0, 39));
+        setUrl(url.substr(0, 39));       
+        return;
+      }
+      alert("올바른 주소가 아닙니다. 유튜브, 트위치 다시보기 링크를 입력해 주세요.");
+      focusUrl();
     }
   }
 

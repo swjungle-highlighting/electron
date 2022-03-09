@@ -148,3 +148,12 @@ def _parse_bookmarker(bookmarks_str) :
         memo, startPointer, endPointer = _get_memo_and_timePointer(b)
         ret.append([startPointer, endPointer, memo])
     return ret
+
+##################################################################################
+## check platform (YT, TW) and return code and URL_ID
+def _check_platform(url) : 
+    if url[:32] == "https://www.youtube.com/watch?v=" : 
+        return 1, url[32:]
+    if url[:29] == "https://www.twitch.tv/videos/" : 
+        return 2, url[29:]
+    return 0, None

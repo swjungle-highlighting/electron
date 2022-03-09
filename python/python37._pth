@@ -1,6 +1,7 @@
 python37.zip
 .
 Lib\site-packages
+Scripts
 server
 
 # Uncomment to run site.main() automatically

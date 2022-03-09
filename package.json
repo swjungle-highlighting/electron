@@ -92,9 +92,7 @@
       "python/**/*",
       "public/Logo.png",
       "node_modules/**/*",
-      "scripts/*",
-      "storage_chat/dummy",
-      "storage_dummy/dummy.png"
+      "scripts/*"
     ],
     "extends": null
   }

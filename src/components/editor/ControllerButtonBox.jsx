@@ -207,12 +207,10 @@ const ControllerButtonBox = ({ url, duration }) => {
             onChange={onChangeInput}
             value={keywords}
             onFocus={() => {
-              console.log("포커스이벤트");
               isTypingRef.current = true;
             }}
             onBlur={() => {
               isTypingRef.current = false;
-              console.log("블러 이벤트입니다.", isTypingRef.current);
             }}
             onKeyPress={(e) => {
               if (e.key === "Enter") {

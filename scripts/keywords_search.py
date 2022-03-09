@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
-from api.HelperFunctions import _cut_time_and_messageset, AhoCorasick
+from api.HelperFunctions import _cut_time_and_messageset, AhoCorasick, _check_platform
+
 import sys
 import json
 
@@ -27,7 +28,7 @@ if __name__ == '__main__':
     url = sys.argv[1]
     keywords = sys.argv[2]
 
-    URL_ID = url.split("=")[1]
+    code, URL_ID = _check_platform(url)
     KEYWORDS = keywords.split(', ')
     Distribution = KeywordsSearch(URL_ID, KEYWORDS)
 

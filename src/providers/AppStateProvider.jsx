@@ -18,8 +18,6 @@ const AppStateProvider = ({ children }) => {
   const [isChatSuper, setIsChatSuper] = useState(-1);
   const [isChatKeywords, setIsChatKeywords] = useState(-1);
   const [isKeywordsDownload, setIsKeywordsDownload] = useState(0);
-  const [title, setTitle] = useState();
-  const [thumbnail, setThumNail] = useState();
   const [bookmarker, setBookmarker] = useState();
   const [markers, setMarkers] = useState([]);
   const [relay, setRelay] = useState(false);
@@ -68,14 +66,9 @@ const AppStateProvider = ({ children }) => {
         setChatSuper(data.chat[2]);
         localStorage.setItem("localVideo", data.video);
         setVideo(data.video);
-        const title = data.title;
-        setTitle(title);
-        const thumbnail = data.thumbnail;
-        setThumNail(thumbnail);
         goEditor();
 
       }catch(e){
-        console.log(e)
       }
   	});
     ipcRenderer.send('toElectron : process call [stream analysis]', {
@@ -101,7 +94,7 @@ const AppStateProvider = ({ children }) => {
 
   function requestExportCut(file, cuts) {
     console.log("cuts export start");
-    ipcRenderer.on('toApp : process result [cuts export]', (event, args) => {
+    ipcRenderer.once('toApp : process result [cuts export]', (event, args) => {
       console.log(args);
   	});
     ipcRenderer.send('toElectron : process call [cuts export]', {
@@ -143,12 +136,8 @@ const AppStateProvider = ({ children }) => {
         isChatKeywords,
         isKeywordsDownload,
         receivedDataSetList,
-        title,
-        thumbnail,
         logged,
         setLogged,
-        setTitle,
-        setThumNail,
 
         setRelay,
         setMarkers,

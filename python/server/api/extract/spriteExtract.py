@@ -10,7 +10,13 @@ COL_SPRITE = 60 //SEC
 W, H = 177, 100
 
 def make_sprite(input_file) : 
-    _clear_dummy()
+    if not os.path.exists(CUT_PATH) : 
+        os.chdir('./resources')
+        os.chdir("./app")
+        os.mkdir("./storage_dummy")
+        os.chdir('./../../')
+    else : 
+        _clear_dummy()
     output_file = input_file[:len(input_file)-4]
     ffmpeg.input(input_file).output(f"./{CUT_PATH}/{output_file}_%04d.png", r=1/SEC, s=f'{str(W)}x{str(H)}').run()
     _1, _2, files = next(os.walk(CUT_PATH))
