@@ -28,6 +28,7 @@ function BookMarker({ url, duration, bookmarker }) {
 
   const bookscroll = document.querySelector("#bookmarkScroll");
 
+
   useEffect(() => {
     const temp = JSON.stringify(markers);
     localStorage.setItem("markers", temp);
