@@ -43,6 +43,7 @@ app.on('window-all-closed', () => {
 	}
 });
 
+// mac
 app.on('activate', () => {
 	if (mainWindow === null) {
 		createWindow();
@@ -55,7 +56,6 @@ let cache = {
 	cuts: undefined,
 	file: undefined,
 };
-
 
 let hiddenWindow;
 

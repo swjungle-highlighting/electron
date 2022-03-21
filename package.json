@@ -90,7 +90,7 @@
       "background_tasks/**/*",
       "build/**/*",
       "python/**/*",
-      "public/Logo.png",
+      "public/*",
       "node_modules/**/*",
       "scripts/*"
     ],

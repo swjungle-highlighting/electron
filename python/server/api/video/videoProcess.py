@@ -18,11 +18,6 @@ DIFF_CUTLINE = 5000000
 
 
 def videoProcess(url_id):
-    # print("########################################################")
-    # print('video ' + url_id)
-    # print("########################################################")
-    """"""
-
     folder = os.getcwd()
     target = ''
     for filename in os.listdir(folder + '/'):
@@ -56,5 +51,3 @@ def videoProcess(url_id):
     VideoDATA_3600perHOUR[0] = 0
 
     return VideoDATA_3600perHOUR
-
-    """"""

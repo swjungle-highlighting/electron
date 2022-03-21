@@ -1184,6 +1184,16 @@ const DataChart = (props) => {
   //   })
   // }, [pointer])
 
+  const isYT = url?.substr(0, 32) === "https://www.youtube.com/watch?v=";
+  const isTW = url?.substr(0, 29) === "https://www.twitch.tv/videos/";
+  var urlid = ''
+      if (isYT) {
+        urlid = url.substr(32, 43)
+      }
+      if (isTW) {
+        urlid = 'v' + url.substr(29, 39)
+      }
+
   return (
     <>
       <div
@@ -1193,7 +1203,7 @@ const DataChart = (props) => {
         onMouseMove={handleMouseMoveInChart}
       ></div>
       {url ? <div id="result" ref={imgTipRef} style={{
-        display: (tip ? 'block' : 'none'), position: "absolute", background: `url(${url?.split("=")[1]}.jpg)`,
+        display: (tip ? 'block' : 'none'), position: "absolute", background: `url(${urlid}.jpg)`,
         width: "176px", height: "100px", backgroundRepeat: "no-repeat",
         backgroundPosition: 
           `${-177 * Math.floor(Math.floor(tip % 60) / 10) - 1}px  ${-100 * Math.floor(tip / 60)}px`,

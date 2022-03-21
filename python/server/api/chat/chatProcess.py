@@ -34,7 +34,7 @@ def _parse_elapsedTime(t) :
         mm = int(t[2:4])
         ss = int(t[5:7])
     else :
-        hh, mm, ss = 0, 0, -1
+        return -1
     return hh*3600 + mm*60 + ss
 
 def _filter_message(message) :
@@ -122,7 +122,7 @@ def TW_parse(url_id, duration) :
             second = int(item["content_offset_seconds"])
             if second >= duration or second < 0 : 
                 continue
-            message = item["message"]["body"]
+            message = _filter_message(item["message"]["body"])
             Distribution[second //RANGE_DISTRIBUTION] += 1
             try :
                 MessageSet[second].append(message)

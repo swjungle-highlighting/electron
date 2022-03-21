@@ -28,7 +28,7 @@
 		});
 	});
 	
-	
+
 	ipcRenderer.on('toBack : process call [cuts export]', (event, args) => {
 		const { file, cuts } = args;
 		let pyshell = new PythonShell(path.join(__dirname, '/../scripts/cuts_export.py'), {

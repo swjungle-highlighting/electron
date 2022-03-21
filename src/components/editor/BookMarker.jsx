@@ -188,6 +188,16 @@ function BookMarker({ url, duration, bookmarker }) {
     }
   }, [markers]);
 
+  const isYT = url?.substr(0, 32) === "https://www.youtube.com/watch?v=";
+  const isTW = url?.substr(0, 29) === "https://www.twitch.tv/videos/";
+  var urlid = ''
+      if (isYT) {
+        urlid = url.substr(32, 43)
+      }
+      if (isTW) {
+        urlid = 'v' + url.substr(29, 39)
+      }
+
   return (
     <>
       <div className="BookMarkerContainer">
@@ -207,7 +217,7 @@ function BookMarker({ url, duration, bookmarker }) {
                   <div
                     className="thumbnail"
                     style={{
-                      background: `url(${url?.split("=")[1]}.jpg)`,
+                      background: `url(${urlid}.jpg)`,
                       width: "176px",
                       height: "100px",
                       backgroundRepeat: "no-repeat",

@@ -4,6 +4,7 @@ import useResult from "../hooks/useResult";
 import useRoute from "../hooks/useRoute";
 import Header from "../components/Header/Header";
 import { GiPlayButton } from "react-icons/gi";
+import { AiOutlineSearch } from "react-icons/ai";
 import "./Home.scss";
 
 const Home = () => {
@@ -112,58 +113,15 @@ const Home = () => {
       <div className="HomeContainer">
         <div className="UpperContainer">
           <div className="upper_left_container">
-            {/* 좌상단 소개 페이지 */}
-            <div>
-              <h1 className="HC1_heading anim">
-                <img className="HC1-logo" src="Logo.png" alt="Logo" />
-                HIGHLIGHTING
-              </h1>
-              <p className="HC1-p1">
-                장면 <span className="point3">하나하나 넘기며 확인</span>하고,{" "}
-                <br />
-                시청자 반응은 어땠는지{" "}
-                <span className="point3">채팅도 다시 체크</span>하고, <br />
-                <span className="point2"> 불편하지 않았나요?</span>
-              </p>
-              <p className="HC1-p1">
-                <span className="point1">하이라이팅(HIGHLIGHTING)</span>을
-                써보세요! <br />
-                방송의 <span className="point3">다시보기 링크</span>만 입력하면
-                이용할 수 있습니다
-              </p>
-              <p className="HC1-p2">
-                <span className="point2">
-                  화면과 볼륨의 변화, 채팅 빈도, 키워드 출현, 후원 통계
-                </span>{" "}
-                등<br />
-                길고 긴 방송 속에서 특별한 부분들을 찾는 기능들을 제공하고
-                <br />
-                <span className="point2">필요한 장면만 골라</span> 가져갈 수
-                있어요
-              </p>
-              <p className="HC1-p3">
-                {" "}
-                하단 <span className="point1">가이드라인</span> 에서 사용법을
-                알아보세요 :
-                <span className="point2" onClick={viewChange}>
-                  클릭!
-                </span>
-              </p>
-              <p className="HC1-p4">
-                Creating and Providing Services :{" "}
-                <span className="point1">Team HIGHLIGHTING</span>
-              </p>
-            </div>
-            {/* 좌상단 소개 페이지 */}
           </div>
           <div className="upper_right_container">
-            {/* 우상단 URL 입력창 */}
             <div className="Home_urlInput">
-            <h1> <img className="inputLogo" src="Logo.png" alt="Logo" onClick={linkCheck} /> </h1>
+            <h1> <img className="inputLogo" src="Logo.png" alt="Logo" onClick={linkCheck} />HIGHLIGHTING </h1>
+              <AiOutlineSearch className="test" />
               <input
                 className="InputBar"
                 ref={urlInput}
-                placeholder="다시보기 영상 URL을 입력해주세요"
+                placeholder="스트리밍 다시보기 영상 URL을 입력해주세요"
                 onChange={onChangeUrl}
                 id="link"
                 onKeyPress={(e) => {
@@ -171,15 +129,23 @@ const Home = () => {
                     linkCheck();
                   }
                 }}
+                autocomplete="off"
               />
               <h3>
                 ⚠ 채팅 내역이 존재하는{" "}
-                <span className="point">다시보기 스트리밍 영상</span> 이 아니면
-                분석이 불가능합니다.
+                <span className="point" onClick={viewChange}>
+                  다시보기 스트리밍 영상
+                </span>{" "}
+                이 아니면 분석이 어렵습니다.
               </h3>
+
               <button className="resultButton" onClick={linkCheck}>
                 <span>분석 시작!</span>
               </button>
+              <p className="HC1-p4">
+                Creating and Providing Services :{" "}
+                <span className="point1">Team HIGHLIGHTING</span>
+              </p>
             </div>
             {/* 우상단 URL 입력창 */}
           </div>
@@ -201,15 +167,15 @@ const Home = () => {
                     id="zero"
                     onMouseEnter={onClickGuide}
                   >
-                    0단계 - 홈페이지
+                    0 - 다시보기 스트리밍 영상이란?
                   </p>
                   <p
                     className={
                       "Home_list-sub" + " " + (active0 ? "sub-active" : "")
                     }
                   >
-                    다시보기 영상 링크만으로 영상을 분석 후 편집에 도움이 되는
-                    데이터들을 제공합니다.
+                    다시보기 스트리밍 영상이란 다음의 영상들을 의미합니다. 해당
+                    영상링크가 아닐 경우 분석이 불가능합니다.
                   </p>
                 </div>
               </li>
@@ -223,16 +189,14 @@ const Home = () => {
                     id="first"
                     onMouseEnter={onClickGuide}
                   >
-                    1단계 - 키워드 검색 기능
+                    1 - 키보드 조작방법
                   </p>
                   <p
                     className={
                       "Home_list-sub" + " " + (active1 ? "sub-active" : "")
                     }
                   >
-                    결과 페이지는 여러 기능을 포함하고 있습니다.(채울 내용 :
-                    차트등의 결과페이지 이미지로 안내) 우선 키워드 검색 기능에
-                    대해 알아봅시다.
+                    저희 HIGHLIGHTING은 다양한 키보드 단축키들을 제공합니다.
                   </p>
                 </div>
               </li>
@@ -247,14 +211,15 @@ const Home = () => {
                     id="second"
                     onMouseEnter={onClickGuide}
                   >
-                    2단계 - 북마크 기능 사용법
+                    2 - 키워드 검색 기능
                   </p>
                   <p
                     className={
                       "Home_list-sub" + " " + (active2 ? "sub-active" : "")
                     }
                   >
-                    내가 원하는 부분을 컷으로 보관할 수 있습니다.
+                    내가 원하는 키워드의 사용 빈도와 도네이션의 발생 시점등을
+                    알려줍니다.
                   </p>
                 </div>
               </li>
@@ -268,14 +233,15 @@ const Home = () => {
                     id="third"
                     onMouseEnter={onClickGuide}
                   >
-                    3단계 - 익스텐션 기능
+                    3단계 - 북마크 기능
                   </p>
                   <p
                     className={
                       "Home_list-sub" + " " + (active3 ? "sub-active" : "")
                     }
                   >
-                    저희 웹서비스는 익스텐션 기능또한 제공하고 있습니다.
+                    원하는 구간을 컷으로 편집하여 보관, 저장하여 다시 볼 수
+                    있습니다.
                   </p>
                   <a className="UPscroll">
                     <br />
@@ -303,13 +269,17 @@ const Home = () => {
             <div className="Home_GuidelineContainer" id="guideContainer">
               {active0 ? (
                 <div className="GuideLine_content">
-                  <h2>HIGHLIGHTING 사용방법</h2>
+                  <h2>다시보기 영상이란?</h2>
                   <div className="guide_content_box">
-                    <img className="step0" src="Step0.png" alt = "step" />
+                    <img className="review1" src="re1.png" alt = "step" />
                     <p className="guide_content_p1">
-                      1.메인페이지 URL창에 유튜브 다시보기 URL을 입력한다.
+                      1. 동영상 - 필터 - 지난 방송 탭의 영상
                     </p>
-                    <p className="guide_content_p2">2.결과보기 클릭!</p>
+                    <img className="review2" src="re2.png" alt = "step" />
+
+                    <p className="guide_content_p2">
+                      2. 이전 실시간 스트림 탭의 영상
+                    </p>
                   </div>
                   <div className="guide_button_box">
                     <GiPlayButton
@@ -333,9 +303,16 @@ const Home = () => {
               )}
               {active1 ? (
                 <div className="GuideLine_content">
-                  <h2>키워드 검색 기능</h2>
+                  <h2> 키보드 조작 방법</h2>
                   <div className="guide_content_box">
-                    <p className="guide_content_p1">내용 박스</p>
+                  <img className="review3" src="bg.png" alt = "step" />
+                    <p className="guide_content_p1">1. space바 : 재생 / 정지</p>
+                    <p className="guide_content_p1">
+                      2. 좌(◀), 우(▶) 버튼 : 5초 단위 앞, 뒤로 영상 시점 이동
+                    </p>
+                    <p className="guide_content_p1">
+                      3. Ctrl + shift + S : 마우스 드래그한 범위 컷편집 저장
+                    </p>
                   </div>
                   <div className="guide_button_box">
                     <GiPlayButton
@@ -359,9 +336,18 @@ const Home = () => {
               )}
               {active2 ? (
                 <div className="GuideLine_content">
-                  <h2>북마크 기능</h2>
+                  <h2>키워드 검색 기능</h2>
                   <div className="guide_content_box">
-                    <p className="guide_content_p1"> 대충 북마크 내용 박스</p>
+                  <img className="review1" src="p1.png" alt = "step" />
+                    <p className="guide_content_p1">
+                      {" "}
+                      키워드 검색 버튼 클릭후 키워드 입력
+                    </p>
+                    <img className="review2" src="re2.png" alt = "step" />
+                    <p className="guide_content_p2">
+                      {" "}
+                      키워드 입력 후 검색버튼 활성화 시 차트 데이터 변경
+                    </p>
                   </div>
                   <div className="guide_button_box">
                     <GiPlayButton
@@ -385,9 +371,17 @@ const Home = () => {
               )}
               {active3 ? (
                 <div className="GuideLine_content">
-                  <h2>HIGHLIGHTING - 크롬 익스텐션</h2>
+                  <h2>북마크 기능</h2>
                   <div className="guide_content_box">
-                    <p className="guide_content_p1">대충 익스텐션 내용</p>
+                  <img className="review1" src="p4.png" alt = "step" />
+                    <p className="guide_content_p1">
+                      차트에서 원하는 영역 드래그
+                    </p>
+                    <img className="review2" src="p5.png" alt = "step" />
+                    <p className="guide_content_p2">
+                      컷 만들기 버튼을 누르거나 단축키(ctrl+shift+S) 입력 시 컷
+                      저장
+                    </p>
                   </div>
                   <div className="guide_button_box">
                     <GiPlayButton

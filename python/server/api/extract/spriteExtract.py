@@ -29,6 +29,9 @@ def make_sprite(input_file) :
         y = H * (index //COL_SPRITE)
         out_image.paste(img, (x, y))
     out_image.save(f"{SC_PATH}/{output_file}.jpg", quality = 95)
+    if not os.path.exists("./public/") : 
+        os.mkdir("./public")
+    out_image.save(f"./public/{output_file}.jpg", quality = 95)
 
 def _clear_dummy() : 
     for file in os.scandir(CUT_PATH) : 

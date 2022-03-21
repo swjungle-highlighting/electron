@@ -1,17 +1,20 @@
 import "./Header.scss";
-import { FiLogIn, FiUser, FiLogOut } from "react-icons/fi";
+import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { GoSignIn } from "react-icons/go";
+import { HiDocumentSearch } from "react-icons/hi";
 import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import LoginPage from "./auth/LoginPage";
 import SigninPage from "./auth/SigninPage";
 import useResult from "../../hooks/useResult";
+import Guide from "./Guide";
 
 export default function Header() {
   const [modalOpen, setModalOpen] = useState(false);
   const [logIn, setLogIn] = useState(false);
   const [signIn, setSignIn] = useState(false);
+  const [guide, SetGuide] = useState(false);
   const { logged, onLogout } = useResult();
   const history = useHistory();
 
@@ -26,6 +29,7 @@ export default function Header() {
         setModalOpen(false);
         setLogIn(false);
         setSignIn(false);
+        SetGuide(false);
       }
     };
 
@@ -44,6 +48,7 @@ export default function Header() {
     setModalOpen(false);
     setLogIn(false);
     setSignIn(false);
+    SetGuide(false);
   };
 
   const onClickEvent = (e) => {
@@ -79,30 +84,35 @@ export default function Header() {
     <div className="navbar">
       <ul className="menu">
         <li id="Home" onClick={onClickEvent}>
-          <img className="Logo" src="Logo.png" alt="Logo" />
+        <img className="Logo" src="Logo.png" alt="Logo" />
           HiGHLIGHTING
         </li>
         {logged ? (
           <div className="SignTool">
-            <li>
-              <FiUser className="purple" />
-              마이 페이지
-            </li>
             <li onClick={handleLogout}>
-              <FiLogOut className="purple" /> 로그아웃
+              <FiLogOut className="purple" /> Log Out
             </li>
           </div>
         ) : (
           <div className="SignTool">
             <li
+              id="Guide"
+              onClick={() => {
+                openModal();
+                SetGuide(true);
+                console.log("Guide 값 : ", guide);
+              }}
+            >
+              <HiDocumentSearch className="purple" /> About
+            </li>
+            <li
               id="SignIn"
               onClick={() => {
                 openModal();
                 setSignIn(true);
-                console.log("SignIn 값 : ", signIn);
               }}
             >
-              <GoSignIn className="purple" /> 회원가입
+              <GoSignIn className="purple" /> Sign In
             </li>
             <li
               id="LogIn"
@@ -111,7 +121,7 @@ export default function Header() {
                 setLogIn(true);
               }}
             >
-              <FiLogIn className="purple" /> 로그인
+              <FiLogIn className="purple" /> Log In
             </li>
           </div>
         )}
@@ -139,6 +149,15 @@ export default function Header() {
           Header="회원가입 및 로그인 "
         >
           <SigninPage setModalOpen={setModalOpen} setSignIn={setSignIn} />
+        </Modal>
+      )}
+      {modalOpen && guide && (
+        <Modal
+          // ref={modalEl}
+          open={modalOpen}
+          close={closeModal}
+        >
+          <Guide />
         </Modal>
       )}
     </div>

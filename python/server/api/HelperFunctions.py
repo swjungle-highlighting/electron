@@ -35,8 +35,7 @@ def _str_to_list(message) :
 
 ##################################################################################
 ## aho-corasick class for keywords seach
-class NODE(dict) :
-    
+class NODE(dict) :   
         def __init__(self) :
             self.final = False
             self.out = set()
